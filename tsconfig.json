@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "esnext",
+    "module": "es2015",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": false,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "useDefineForClassFields": true
+  }
+}
