@@ -4,7 +4,6 @@ export interface MasterPassTurkeyArgs {
     userId: string
     sendSmsLanguage: string
     sendSms: 'N' | 'Y',
-    cardHolderName: string
     macroMerchantId: string
     clientIp: string
     sdkUrl: string
@@ -71,6 +70,7 @@ export interface PurchaseNewArgs {
     referenceNo: string,
     amount: number,
     installmentCount: number,
+    additionalParameters?: object,
     card: PurchaseCardModel
 }
 
@@ -79,12 +79,14 @@ export interface PurchaseExistingArgs {
     referenceNo: string,
     amount: number,
     installmentCount: number,
+    additionalParameters?: object,
     cardName: string
 }
 
 export type PurchaseArgs = PurchaseNewArgs | PurchaseExistingArgs;
 
 export interface PurchaseCardModel {
+    cardHolderName: string,
     number: string,
     cvc: string,
     expMonth: number,

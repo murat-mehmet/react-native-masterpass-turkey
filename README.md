@@ -28,9 +28,9 @@ export class App extends Component {
                 sendSmsLanguage='tur'
                 sendSms='N'
                 clientId='1234567'
-                sdkUrl='https=//www.yoursite.com.tr/Scripts/MasterPass/mfs-client.min.js'
-                jqueryUrl='https=//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'
-                serviceUrl='https=//ui.masterpassturkiye.com/v2'
+                sdkUrl='https://www.yoursite.com.tr/Scripts/MasterPass/mfs-client.min.js'
+                jqueryUrl='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'
+                serviceUrl='https://ui.masterpassturkiye.com/v2'
                 cardHolderName='your cardholder name'
                 macroMerchantId='1234567123456'
                 clientIp='123.12.12.123' />
@@ -52,7 +52,7 @@ export class App extends Component {
 | deleteCard(cardName)    | name field of the card                                                    | Deletes a card from mp                           | `{result: boolean}`                             
 | resendOtp()             | none                                                                      | Resends one time password                        | `{result: boolean, action: 'verify-otp' or 'list-cards', type: 'bank' or 'mp' or 'mpin'}`                             
 | verifyOtp(code, type)   | code is entered by user, type comes from result with 'verify-otp' action  | Verify on time password                          | `{result: boolean, action: 'verify-otp' or 'list-cards', type: 'bank' or 'mp' or 'mpin'}`                             
-| purchase(args)          | `{orderNo: string, referenceNo: string, amount: number, installmentCount: number, cardName: string OR card: {number: string, cvc: string, expMonth: number, expYear: number, accountAliasName?: string }}` | Makes a purchase                | `{result: boolean, action: 'verify-otp' or 'redirect-3D', token: string, type: type: 'bank' or 'mp' or 'mpin', url: string}`
+| purchase(args)          | `{orderNo: string, referenceNo: string, amount: number, installmentCount: number, additionalParameters: object, cardName: string OR card: {number: string, cvc: string, expMonth: number, expYear: number, accountAliasName?: string }}` | Makes a purchase                | `{result: boolean, action: 'verify-otp' or 'redirect-3D', token: string, type: type: 'bank' or 'mp' or 'mpin', url: string}`
 
 ## Test 
 ```sh

@@ -34,7 +34,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
     };
     execute = <T extends unknown>(script) => {
         return new Promise<T>((resolve, reject) => {
-            const requestId = 'MFS_response_' + Math.round(Math.random() * 10000000000 + 1000000000);
+            const requestId = '_' + Math.round(Math.random() * 10000000000 + 1000000000);
             this.requests[requestId] = {resolve, reject};
             this.webView.injectJavaScript(`(async function () {
                 ${script}
@@ -47,12 +47,12 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
         const parsed = JSON.parse(event.nativeEvent.data);
         if (!parsed.requestId) return this.onEvent(parsed);
         if (parsed.source != "RN") return this.onRequest(parsed.message, parsed.body)
-            .then(r => this.webView.injectJavaScript(`(function () {onMessage(${JSON.stringify({
+            .then(r => this.webView.injectJavaScript(`(function () {RN.onMessage(${JSON.stringify({
                 source: parsed.source,
                 requestId: parsed.requestId,
                 result: r
             })})})()`))
-            .catch(e => this.webView.injectJavaScript(`(function () {onMessage(${JSON.stringify({
+            .catch(e => this.webView.injectJavaScript(`(function () {RN.onMessage(${JSON.stringify({
                 source: parsed.source,
                 requestId: parsed.requestId,
                 error: e.message
@@ -76,6 +76,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
     render() {
         return (
             <WebView source={{html: masterPassHTML(this.props)}}
+                     androidHardwareAccelerationDisabled={true} // required to fix: https://github.com/react-native-webview/react-native-webview/issues/430
                      ref={c => this.webView = c}
                      onMessage={this.onMessage} />
         )

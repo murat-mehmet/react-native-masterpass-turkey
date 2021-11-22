@@ -195,20 +195,21 @@ export const service = (args: MasterPassTurkeyArgs) => {
 
         function resendOtp() {
             return new Promise(async (resolve, reject) => {
-                MFS.resendOtp('${token}', '${sendSmsLanguage}', otpResult(resolve, reject));
+                const token = MFS.getLastToken();
+                MFS.resendOtp(token, '${sendSmsLanguage}', otpResult(resolve, reject));
             })
         }
 
         function verifyOtp(pin, type) {
-            $("#mpin-form [name='validationCode']").val(pin);
-            $("#mpin-form [name='pinType']").val(type == 'mpin' ? 'mpin' : 'otp');
+            $("#otp-form [name='validationCode']").val(pin);
+            $("#otp-form [name='pinType']").val(type == 'mpin' ? 'mpin' : 'otp');
             return new Promise(async (resolve, reject) => {
-                MFS.validateTransaction($("#mpin-form"), otpResult(resolve, reject));
+                MFS.validateTransaction($("#otp-form"), otpResult(resolve, reject));
             })
         }
 
         function purchaseWithNewCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, card: {number, cvc, expMonth, expYear, accountAliasName}} = args;
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}} = args;
             let expiryDate = expYear.toString();
             if (expMonth < 10)
                 expiryDate += '0';
@@ -219,9 +220,14 @@ export const service = (args: MasterPassTurkeyArgs) => {
             $("#payment-form [name='rtaPan']").val(number);
             $("#payment-form [name='expiryDate']").val(expiryDate);
             $("#payment-form [name='cvc']").val(cvc);
+            $("#payment-form [name='cardHolderName']").val(cardHolderName);
             $("#payment-form [name='installmentCount']").val(installmentCount.toString());
-            if (accountAliasName)
+            if (accountAliasName) {
                 $("#payment-form [name='accountAliasName']").val(accountAliasName);
+            }
+            $("#payment-form [name='accountAliasName']").prop("disabled", !!accountAliasName);
+            if (additionalParameters)
+                MFS.setAdditionalParameters(additionalParameters);
             return new Promise((resolve, reject) => {
                 if (accountAliasName)
                     MFS.purchaseAndRegister($("#payment-form"), paymentResult(resolve, reject, 0));
@@ -231,18 +237,16 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         function purchaseWithExistingCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, cardName} = args;
-            let expiryDate = expYear.toString();
-            if (expMonth < 10)
-                expiryDate += '0';
-            expiryDate += expMonth.toString();
-            $("#payment-form [name='referenceNo']").val(referenceNo.toString());
-            $("#payment-form [name='orderNo']").val(orderNo.toString());
-            $("#payment-form [name='amount']").val(Math.round(amount * 100).toString());
-            $("#payment-form [name='listAccountName']").val(cardName);
-            $("#payment-form [name='installmentCount']").val(installmentCount.toString());
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, cardName} = args;
+            $("#purchase-form [name='referenceNo']").val(referenceNo.toString());
+            $("#purchase-form [name='orderNo']").val(orderNo.toString());
+            $("#purchase-form [name='amount']").val(Math.round(amount * 100).toString());
+            $("#purchase-form [name='listAccountName']").val(cardName);
+            $("#purchase-form [name='installmentCount']").val(installmentCount.toString());
+            if (additionalParameters)
+                MFS.setAdditionalParameters(additionalParameters);
             return new Promise(async (resolve, reject) => {
-                MFS.purchase($("#payment-form"), paymentResult(resolve, reject, 1));
+                MFS.purchase($("#purchase-form"), paymentResult(resolve, reject, 1));
             })
         }
     `;

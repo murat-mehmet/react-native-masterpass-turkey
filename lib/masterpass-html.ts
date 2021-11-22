@@ -3,7 +3,7 @@ import {executor} from "./webview-executor";
 import {MasterPassTurkeyArgs} from "./types/common";
 
 export const masterPassHTML = (args: MasterPassTurkeyArgs) => {
-    const {token, referenceNo, userId, sendSms, sendSmsLanguage, cardHolderName, macroMerchantId, clientIp, sdkUrl} = args;
+    const {token, referenceNo, userId, sendSms, sendSmsLanguage, macroMerchantId, clientIp, sdkUrl} = args;
     return `<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -48,7 +48,7 @@ export const masterPassHTML = (args: MasterPassTurkeyArgs) => {
 </form>
 
 <form action="" method="POST" id="payment-form" style="display:none">
-    <input type="hidden" name="cardHolderName" value="${cardHolderName}" />
+    <input type="hidden" name="cardHolderName" value="" />
     <input type="hidden" name="expiryDate" value="" />
     <input type="hidden" name="cvc" value="" />
     <input type="hidden" name="rtaPan" value="" />
@@ -63,6 +63,8 @@ export const masterPassHTML = (args: MasterPassTurkeyArgs) => {
     <input type="hidden" name="orderNo" value="" />
     <input type="hidden" name="actionType" value="A" />
     <input type="hidden" name="installmentCount" value="" />
+    <input type="hidden" name="accountAliasName" value="" />
+    
 </form>
 <form action="" method="POST" id="purchase-form" style="display:none">
     <input type="hidden" name="amount" value="" />
@@ -85,6 +87,11 @@ export const masterPassHTML = (args: MasterPassTurkeyArgs) => {
 
 <script>${executor}</script>
 <script>${service(args)}</script>
+<script>
+    $( document ).ready(function() {
+        RN.publish({status: 'ready'})
+    });
+</script>
 </body>
 </html>
 `;
