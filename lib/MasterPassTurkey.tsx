@@ -15,8 +15,34 @@ import {
 } from "./types/common";
 
 export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
+    html;
     webView: WebView;
     requests: {[requestId: string]: {resolve: (value) => any, reject: (error) => any}} = {};
+
+    constructor(props) {
+        super(props);
+        this.html = masterPassHTML(props);
+    }
+    
+    componentDidUpdate(prevProps: Readonly<MasterPassTurkeyProps>, prevState: Readonly<{}>, snapshot?: any) {
+        let js = [];
+        if (this.props.token != prevProps.token)
+            js.push(`$('[name="token"]').val('${this.props.token}');`);
+        if (this.props.referenceNo != prevProps.referenceNo)
+            js.push(`$('[name="referenceNo"]').val('${this.props.referenceNo}');`);
+        if (this.props.userId != prevProps.userId)
+            js.push(`$('[name="userId"], [name="msisdn"]').val('${this.props.userId}');`);
+        if (this.props.sendSms != prevProps.sendSms)
+            js.push(`$('[name="sendSms"]').val('${this.props.sendSms}');`);
+        if (this.props.sendSmsLanguage != prevProps.sendSmsLanguage)
+            js.push(`$('[name="sendSmsLanguage"]').val('${this.props.sendSmsLanguage}');`);
+        if (this.props.macroMerchantId != prevProps.macroMerchantId)
+            js.push(`$('[name="macroMerchantId"]').val('${this.props.macroMerchantId}');`);
+        if (this.props.clientIp != prevProps.clientIp)
+            js.push(`$('[name="clientIp"]').val('${this.props.clientIp}');`);
+        if (js.length)
+            this.execute<RegistrationCheckResult>(`${js.join(' ')} return true;`).catch(console.warn);
+    }
 
     registrationCheck = () => this.execute<RegistrationCheckResult>('return registrationCheck()');
     linkCards = () => this.execute<OtpResult>('return linkCards()');
@@ -75,7 +101,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
 
     render() {
         return (
-            <WebView source={{html: masterPassHTML(this.props)}}
+            <WebView source={{html: this.html}}
                      androidHardwareAccelerationDisabled={true} // required to fix: https://github.com/react-native-webview/react-native-webview/issues/430
                      ref={c => this.webView = c}
                      onMessage={this.onMessage} />
