@@ -225,7 +225,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
             if (accountAliasName) {
                 $("#payment-form [name='accountAliasName']").val(accountAliasName);
             }
-            $("#payment-form [name='accountAliasName']").prop("disabled", !!accountAliasName);
+            $("#payment-form [name='accountAliasName']").prop("disabled", !accountAliasName);
             if (additionalParameters)
                 MFS.setAdditionalParameters(additionalParameters);
             return new Promise((resolve, reject) => {

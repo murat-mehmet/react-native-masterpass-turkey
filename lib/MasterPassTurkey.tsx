@@ -23,7 +23,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
         super(props);
         this.html = masterPassHTML(props);
     }
-    
+
     componentDidUpdate(prevProps: Readonly<MasterPassTurkeyProps>, prevState: Readonly<{}>, snapshot?: any) {
         let js = [];
         if (this.props.token != prevProps.token)
@@ -66,7 +66,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
                 ${script}
                 })()
                 .then(r => window.ReactNativeWebView.postMessage(JSON.stringify({source: 'RN', requestId: '${requestId}', result: r})))
-                .catch(e => window.ReactNativeWebView.postMessage(JSON.stringify({source: 'RN', requestId: '${requestId}', error: e.message})))`);
+                .catch(e => window.ReactNativeWebView.postMessage(JSON.stringify({source: 'RN', requestId: '${requestId}', error: e.message})));true;`);
         })
     }
     onMessage = (event: WebViewMessageEvent) => {
@@ -77,12 +77,12 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
                 source: parsed.source,
                 requestId: parsed.requestId,
                 result: r
-            })})})()`))
+            })})})();true;`))
             .catch(e => this.webView.injectJavaScript(`(function () {RN.onMessage(${JSON.stringify({
                 source: parsed.source,
                 requestId: parsed.requestId,
                 error: e.message
-            })})})()`));
+            })})})();true;`));
         const request = this.requests[parsed.requestId];
         if (!request) return;
         delete this.requests[parsed.requestId];

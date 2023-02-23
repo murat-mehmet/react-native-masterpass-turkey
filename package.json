@@ -1,6 +1,6 @@
 {
   "name": "react-native-masterpass-turkey",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "React Native Masterpass Turkey",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
