@@ -330,7 +330,7 @@ class MasterPassExample extends Component {
           }
 
           // verify otp
-          const verifyResult = await this.mass.verifyOtp(code, purchaseResult.type).catch(e => e);
+          const verifyResult = await this.masterpass.verifyOtp(code, purchaseResult.type).catch(e => e);
 
           // handle otp error
           if (verifyResult instanceof Error) {
