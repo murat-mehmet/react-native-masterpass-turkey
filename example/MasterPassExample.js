@@ -114,6 +114,7 @@ class MasterPassExample extends Component {
       sentTime: Date.now(),
     }, () => this.masterpass.resendOtp().catch(console.warn));
   };
+
   getOtpCode = async () => {
     return new Promise(async resolve => {
 
@@ -153,7 +154,6 @@ class MasterPassExample extends Component {
       this.setState({ smsDialog: true });
     });
   };
-
 
   mpCardSelected = async (index) => {
     this.setState({ mpCardSelected: index });
