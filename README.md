@@ -12,7 +12,7 @@ Also make sure you have `react-native-webview` peer dependency installed
 ```sh
 npm install react-native-webview --save
 yarn add react-native-webview
-```~~~~
+```
 ## Usage
 ```javascript
 import React, {Component} from 'react';
