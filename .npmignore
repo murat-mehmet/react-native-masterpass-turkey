@@ -3,3 +3,4 @@ test/
 example/
 .git/
 .idea/
+node_modules/

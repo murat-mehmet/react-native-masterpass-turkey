@@ -11,6 +11,11 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "useDefineForClassFields": true
-  }
+    "useDefineForClassFields": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": [
+    "lib/*"
+  ]
 }

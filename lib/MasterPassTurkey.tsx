@@ -102,6 +102,7 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
     render() {
         return (
             <WebView source={{html: this.html}}
+                     style={{opacity: 0}}
                      androidHardwareAccelerationDisabled={true} // required to fix: https://github.com/react-native-webview/react-native-webview/issues/430
                      ref={c => this.webView = c}
                      onMessage={this.onMessage} />
