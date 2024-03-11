@@ -209,7 +209,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         function purchaseWithNewCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}} = args;
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}, token} = args;
             let expiryDate = expYear.toString();
             if (expMonth < 10)
                 expiryDate += '0';
@@ -222,6 +222,8 @@ export const service = (args: MasterPassTurkeyArgs) => {
             $("#payment-form [name='cvc']").val(cvc);
             $("#payment-form [name='cardHolderName']").val(cardHolderName);
             $("#payment-form [name='installmentCount']").val(installmentCount.toString());
+            if (token)
+                $("#payment-form [name='token']").val(token);
             if (accountAliasName) {
                 $("#payment-form [name='accountAliasName']").val(accountAliasName);
             }
@@ -237,12 +239,15 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         function purchaseWithExistingCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, cardName} = args;
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, cardName, token} = args;
             $("#purchase-form [name='referenceNo']").val(referenceNo.toString());
             $("#purchase-form [name='orderNo']").val(orderNo.toString());
             $("#purchase-form [name='amount']").val(Math.round(amount * 100).toString());
             $("#purchase-form [name='listAccountName']").val(cardName);
             $("#purchase-form [name='installmentCount']").val(installmentCount.toString());
+            if (token)
+                $("#purchase-form [name='token']").val(token);
+              
             if (additionalParameters)
                 MFS.setAdditionalParameters(additionalParameters);
             return new Promise(async (resolve, reject) => {

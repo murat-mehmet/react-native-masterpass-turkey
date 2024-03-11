@@ -71,7 +71,8 @@ export interface PurchaseNewArgs {
     amount: number,
     installmentCount: number,
     additionalParameters?: object,
-    card: PurchaseCardModel
+    card: PurchaseCardModel,
+    token?: string
 }
 
 export interface PurchaseExistingArgs {
@@ -80,7 +81,8 @@ export interface PurchaseExistingArgs {
     amount: number,
     installmentCount: number,
     additionalParameters?: object,
-    cardName: string
+    cardName: string,
+    token?: string
 }
 
 export type PurchaseArgs = PurchaseNewArgs | PurchaseExistingArgs;
