@@ -295,7 +295,7 @@ class MasterPassExample extends Component {
     // result
     if (purchaseResult.result) {
       // purchase completed without 3ds
-      alert("Purchase success");
+      alert("Purchase success with token " + purchaseResult.token);
     } else {
 
       // define a function that will redirect to 3ds page to continue payment
@@ -338,7 +338,11 @@ class MasterPassExample extends Component {
           }
 
           // handle next action
-          if (verifyResult.action === OtpAction.redirect3D) {
+          if (verifyResult.result) {
+
+            // purchase completed without 3ds
+            alert("Purchase success with token " + verifyResult.token);
+          } else if (verifyResult.action === OtpAction.redirect3D) {
 
             // otp verification was success, now we can redirect to payment
             redirectAction(verifyResult.url);

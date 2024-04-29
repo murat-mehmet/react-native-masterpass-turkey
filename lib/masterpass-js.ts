@@ -114,6 +114,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
                 return resolve({
                     result: true,
                     action: 'list-cards',
+                    token: response.token
                 })
             } else {
 

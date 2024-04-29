@@ -1,6 +1,6 @@
 {
   "name": "react-native-masterpass-turkey",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "React Native Masterpass Turkey",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,7 +28,10 @@
     "@types/react-native": "^0.60.25",
     "chai": "^4.2.0",
     "mocha": "^7.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x",
+    "react-native-webview": ">=8.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.1",
