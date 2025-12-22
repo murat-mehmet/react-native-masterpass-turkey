@@ -210,7 +210,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         function purchaseWithNewCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}, token} = args;
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}, token, macroMerchantId} = args;
             let expiryDate = expYear.toString();
             if (expMonth < 10)
                 expiryDate += '0';
@@ -225,6 +225,8 @@ export const service = (args: MasterPassTurkeyArgs) => {
             $("#payment-form [name='installmentCount']").val(installmentCount.toString());
             if (token)
                 $("#payment-form [name='token']").val(token);
+            if (macroMerchantId)
+                $("#payment-form [name='macroMerchantId']").val(macroMerchantId);
             if (accountAliasName) {
                 $("#payment-form [name='accountAliasName']").val(accountAliasName);
             }
@@ -240,7 +242,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         function purchaseWithExistingCard(args) {
-            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, cardName, token} = args;
+            const {orderNo, referenceNo, amount, installmentCount, additionalParameters, cardName, token, macroMerchantId} = args;
             $("#purchase-form [name='referenceNo']").val(referenceNo.toString());
             $("#purchase-form [name='orderNo']").val(orderNo.toString());
             $("#purchase-form [name='amount']").val(Math.round(amount * 100).toString());
@@ -248,6 +250,8 @@ export const service = (args: MasterPassTurkeyArgs) => {
             $("#purchase-form [name='installmentCount']").val(installmentCount.toString());
             if (token)
                 $("#purchase-form [name='token']").val(token);
+            if (macroMerchantId)
+                $("#purchase-form [name='macroMerchantId']").val(macroMerchantId);
               
             if (additionalParameters)
                 MFS.setAdditionalParameters(additionalParameters);

@@ -73,6 +73,7 @@ export interface PurchaseNewArgs {
     additionalParameters?: object,
     card: PurchaseCardModel,
     token?: string
+    macroMerchantId?: string
 }
 
 export interface PurchaseExistingArgs {
@@ -83,6 +84,7 @@ export interface PurchaseExistingArgs {
     additionalParameters?: object,
     cardName: string,
     token?: string
+    macroMerchantId?: string
 }
 
 export type PurchaseArgs = PurchaseNewArgs | PurchaseExistingArgs;
