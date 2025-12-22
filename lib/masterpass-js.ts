@@ -9,7 +9,8 @@ export const service = (args: MasterPassTurkeyArgs) => {
                 MFS.setClientId('${clientId}');
                 MFS.setAddress('${serviceUrl}');
 
-                MFS.checkMasterPass($("#checkMP-form"), function (status, response) {
+                MFS.checkMasterPass($("#checkMP-form"), function (statusCode, response) {
+                  RN.publish({name: 'checkMasterPass', data: {statusCode, response}});
                     if (response.responseCode == "0000" || response.responseCode == "") {
 
                         // 1. MasterPass hesabi bulunmayan kullanici (CheckMasterPass => 000000XXXXXXXXXX)
@@ -53,6 +54,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
         function listCards() {
             return new Promise(async (resolve, reject) => {
                 MFS.listCards('${userId}', '${token}', function (statusCode, response) {
+                        RN.publish({name: 'listCards', data: {statusCode, response}});
                         if (response.responseCode != "0000" && response.responseCode != "") {
                             if (response.responseCode == "1078") { // Telefon numarası başka kullanıcı tarafından doğrulanmış ve kullanılmış
                                 resolve({
@@ -72,6 +74,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
 
                         for (var i = 0; i < response.cards.length; i++) {
                             var card = response.cards[i];
+                            const rawCard = {...card};
                             card.Name = htmlEntities(card.Name);
 
                             cards.push({
@@ -81,7 +84,9 @@ export const service = (args: MasterPassTurkeyArgs) => {
                                 name: card.Name,
                                 productName: card.ProductName,
                                 uniqueId: card.UniqueId,
-                                maskedCardNumber: card.Value1
+                                maskedCardNumber: card.Value1,
+                                eftCode: card.EftCode,
+                                _raw: rawCard
                             });
                         }
                         resolve({
@@ -98,6 +103,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
             $("#deleteCard-form [name='accountAliasName']").val(cardName);
             return new Promise(async (resolve, reject) => {
                 MFS.deleteCard($("#deleteCard-form"), function (statusCode, response) {
+                    RN.publish({name: 'deleteCard', data: {statusCode, response}});
                     if (response.responseCode == "0000" || response.responseCode == "") {
                         resolve({
                             result: true
@@ -110,6 +116,7 @@ export const service = (args: MasterPassTurkeyArgs) => {
         }
 
         var otpResult = (resolve, reject) => function (statusCode, response) {
+            RN.publish({name: 'otp-callback', data: {statusCode, response}});
             if (response.responseCode == "0000" || response.responseCode == "") {
                 return resolve({
                     result: true,
@@ -154,13 +161,16 @@ export const service = (args: MasterPassTurkeyArgs) => {
          * NewCardRegistration: 0,
          * WithRegisteredCard: 1,
          * DirectPayment: 2
+         * OnlyRegister: 3
+         * RecurringPayment: 4
          */
         var paymentResult = (resolve, reject, type) => function (statusCode, response) {
+            RN.publish({name: 'mp-callback', data: {statusCode, response, type}});
             if (response.responseCode == "0000" || response.responseCode == "") {
                 return resolve({
                     result: true,
                     token: response.token,
-                    purchaseType
+                    type
                 })
             } else {
 
@@ -258,6 +268,50 @@ export const service = (args: MasterPassTurkeyArgs) => {
             return new Promise(async (resolve, reject) => {
                 MFS.purchase($("#purchase-form"), paymentResult(resolve, reject, 1));
             })
+        }
+
+        function registerCard(args) {
+          const {referenceNo, card: {cardHolderName, number, cvc, expMonth, expYear, accountAliasName}, token, macroMerchantId} = args;
+          let expiryDate = expYear.toString();
+          if (expMonth < 10)
+            expiryDate += '0';
+          expiryDate += expMonth.toString();
+          $("#register-form [name='referenceNo']").val(referenceNo.toString());
+          $("#register-form [name='rtaPan']").val(number);
+          $("#register-form [name='expiryDate']").val(expiryDate);
+          $("#register-form [name='cvc']").val(cvc);
+          $("#register-form [name='cardHolderName']").val(cardHolderName);
+          if (token)
+            $("#register-form [name='token']").val(token);
+          if (macroMerchantId)
+            $("#register-form [name='macroMerchantId']").val(macroMerchantId);
+          $("#register-form [name='accountAliasName']").val(accountAliasName);
+
+          return new Promise(async (resolve, reject) => {
+            MFS.register($("#register-form"), paymentResult(resolve, reject, 3));
+          })
+        }
+        
+        function initiateRecurringPayment(args) {
+          const {productId, referenceNo, amount, cardName, endDate, token, macroMerchantId} = args;
+
+          const date = new Date(endDate);
+          const year = date.getFullYear().toString();
+          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+          const day = date.getDate().toString().padStart(2, '0');
+          $("#recurringPayment-form [name='referenceNo']").val(referenceNo.toString());
+          $("#recurringPayment-form [name='listAccountName']").val(cardName);
+          $("#recurringPayment-form [name='productId']").val(productId.toString());
+          $("#recurringPayment-form [name='amount']").val(Math.round(amount * 100).toString());
+          $("#recurringPayment-form [name='endDate']").val(year + month + day);
+          if (token)
+            $("#recurringPayment-form [name='token']").val(token);
+          if (macroMerchantId)
+            $("#recurringPayment-form [name='macroMerchantId']").val(macroMerchantId);
+
+          return new Promise(async (resolve, reject) => {
+            MFS.initiateRecurringPayment($("#recurringPayment-form"), paymentResult(resolve, reject, 4));
+          })
         }
     `;
 }

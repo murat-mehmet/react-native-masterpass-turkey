@@ -2,16 +2,18 @@ import React, {Component} from "react";
 import WebView, {WebViewMessageEvent} from "react-native-webview";
 import {masterPassHTML} from "./masterpass-html";
 import {
-    CardResult,
-    DeleteCardResult,
-    MasterPassTurkeyArgs,
-    OtpResult,
-    OtpType,
-    PurchaseArgs,
-    PurchaseExistingArgs,
-    PurchaseNewArgs,
-    PurchaseResult,
-    RegistrationCheckResult
+  CardResult,
+  DeleteCardResult,
+  MasterPassTurkeyArgs,
+  OtpResult,
+  OtpType,
+  PurchaseArgs,
+  PurchaseExistingArgs,
+  PurchaseNewArgs,
+  PurchaseResult,
+  RecurringPaymentArgs,
+  RegisterArgs,
+  RegistrationCheckResult
 } from "./types/common";
 
 export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
@@ -58,6 +60,8 @@ export class MasterPassTurkey extends Component<MasterPassTurkeyProps> {
         else
             throw new Error('Card or cardname is required')
     };
+    registerCard = (args: RegisterArgs): Promise<OtpResult> => this.execute(`return registerCard(${JSON.stringify(args)})`);
+    initiateRecurringPayment = (args: RecurringPaymentArgs): Promise<OtpResult> => this.execute(`return initiateRecurringPayment(${JSON.stringify(args)})`);
     execute = <T extends unknown>(script) => {
         return new Promise<T>((resolve, reject) => {
             const requestId = '_' + Math.round(Math.random() * 10000000000 + 1000000000);

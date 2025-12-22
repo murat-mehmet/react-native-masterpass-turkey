@@ -58,7 +58,9 @@ export interface CardModel {
     name: string,
     productName: string,
     uniqueId: string,
-    maskedCardNumber: string
+    maskedCardNumber: string,
+    eftCode: string,
+    _raw: any,
 }
 
 export interface DeleteCardResult {
@@ -83,8 +85,8 @@ export interface PurchaseExistingArgs {
     installmentCount: number,
     additionalParameters?: object,
     cardName: string,
-    token?: string
-    macroMerchantId?: string
+    token?: string,
+    macroMerchantId?: string,
 }
 
 export type PurchaseArgs = PurchaseNewArgs | PurchaseExistingArgs;
@@ -116,4 +118,21 @@ export enum PurchaseType {
 export enum PurchaseAction {
     verifyOtp = 'verify-otp',
     redirect3D = 'redirect-3D'
+}
+
+export interface RegisterArgs {
+  referenceNo: string,
+  card: PurchaseCardModel,
+  token?: string,
+  macroMerchantId?: string,
+}
+
+export interface RecurringPaymentArgs {
+  productId: string,
+  referenceNo: string,
+  cardName: string,
+  endDate: number,
+  amount: number,
+  token?: string,
+  macroMerchantId?: string,
 }

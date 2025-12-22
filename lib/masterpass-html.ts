@@ -84,6 +84,43 @@ export const masterPassHTML = (args: MasterPassTurkeyArgs) => {
     <input type="hidden" name="sendSmsMerchant" value="N" />
     <input type="hidden" name="password" value="" />
 </form>
+<form action="" method="POST" id="register-form" style="display:none">
+    <input type="hidden" name="cardHolderName" value="" />
+    <input type="hidden" name="expiryDate" value="" />
+    <input type="hidden" name="cvc" value="" />
+    <input type="hidden" name="rtaPan" value="" />
+    <input type="hidden" name="accountAliasName" value="" />
+        
+    <input type="hidden" name="msisdn" value="${userId}" />
+    <input type="hidden" name="token" value="${token}" />
+    <input type="hidden" name="referenceNo" value="${referenceNo}" />
+    <input type="hidden" name="sendSmsLanguage" value="${sendSmsLanguage}" />
+    <input type="hidden" name="sendSms" value="${sendSms}" />
+    <input type="hidden" name="macroMerchantId" value="${macroMerchantId}" />
+    <input type="hidden" name="clientIp" value="${clientIp}" />
+    <input type="hidden" name="sendSmsMerchant" value="N" />
+    <input type="hidden" name="delinkReason" value="" />
+    <input type="hidden" name="eActionType" value="A" />
+    <input type="hidden" name="cardTypeFlag" value="05" />
+    <input type="hidden" name="cpinFlag" value="Y" />
+    <input type="hidden" name="defaultAccount" value="Y" />
+    <input type="hidden" name="mmrpConfig" value="110010" />
+</form>
+<form action="" method="POST" id="recurringPayment-form" style="display:none">
+    <input type="hidden" name="msisdn" value="${userId}" />
+    <input type="hidden" name="token" value="${token}" />
+    <input type="hidden" name="listAccountName" value="" />
+    <input type="hidden" name="amount" value="" />
+    <input type="hidden" name="endDate" value="" />
+    <input type="hidden" name="referenceNo" value="${referenceNo}" />
+    <input type="hidden" name="sendSmsLanguage" value="${sendSmsLanguage}" />
+    <input type="hidden" name="sendSms" value="${sendSms}" />
+    <input type="hidden" name="macroMerchantId" value="${macroMerchantId}" />
+    <input type="hidden" name="clientIp" value="${clientIp}" />
+    <input type="hidden" name="sendSmsMerchant" value="N" />
+    <input type="hidden" name="actionType" value="A" />
+    <input type="hidden" name="productId" value="" />
+</form>
 
 <script>${executor}</script>
 <script>${service(args)}</script>
